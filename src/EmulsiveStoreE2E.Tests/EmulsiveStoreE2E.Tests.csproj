@@ -21,4 +21,24 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="env.in.test.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="appsettings.dev.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="appsettings.local.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EmulsiveStoreE2E.Core\EmulsiveStoreE2E.Core.csproj" />
+      <ProjectReference Include="..\EmulsiveStoreE2E.Ui\EmulsiveStoreE2E.Ui.csproj" />
+    </ItemGroup>
+
 </Project>

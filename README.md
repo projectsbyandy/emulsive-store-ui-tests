@@ -7,3 +7,11 @@ UI e2e tests for Emulsive-ts-store website
 3. run `npm install`
 4. start api and front end by running `npm run all`
 - Note that by default, all data is mocked.
+
+## Features
+- Sequential and Parallel playwright tests
+  - Stopwatch logs during tests provide an indication og test times (note unit does not report correctly paralleled tests run times)
+  - Update the `enableDelayForParallelTest` flag in `appsettings.json` to illustrate time saved on longer user journeys.
+- Config support
+- Retry resilience
+- Dependency separation between business logic in core and playwright implementation
