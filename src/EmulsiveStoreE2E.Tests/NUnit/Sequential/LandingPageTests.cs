@@ -6,20 +6,28 @@ using EmulsiveStoreE2E.Core.UiComponents;
 using EmulsiveStoreE2E.Tests.NUnit.Sequential.Lifecycle;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
+using Serilog;
 
 namespace EmulsiveStoreE2E.Tests.NUnit.Sequential;
+
+/*
+ * Example of Re-using the same IPage across tests
+ */
 
 internal class LandingPageTests : TestSetup
 {
     private ILandingPage _landingPage;
     private IPage _page;
     private IResilienceRetry _resilienceRetry;
-    
+
     [SetUp]
     public async Task Setup()
     {
         _landingPage = Guard.Against.Null(TestServices.GetService<ILandingPage>());
         _page = Guard.Against.Null(TestServices.GetService<IPage>());
+        Guard.Against.Null(TestServices.GetService<ILogger>())
+            .Information("Page hash from sequential tests: {@Hash}", _page.GetHashCode());
+        
         _resilienceRetry = Guard.Against.Null(TestServices.GetService<IResilienceRetry>());
         
         await _landingPage.NavigateToStoreAsync();

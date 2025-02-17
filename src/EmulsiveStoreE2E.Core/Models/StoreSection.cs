@@ -13,5 +13,7 @@ public enum StoreSection
     [Description("/checkout")]
     Checkout, 
     [Description("/orders")]
-    Orders
+    Orders,
+    [Description("/")]
+    Landing
 }

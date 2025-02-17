@@ -29,8 +29,16 @@ internal class TestSetup
     [OneTimeTearDown]
     public async Task GlobalTeardown()
     {
+        var playwright = TestServices.GetRequiredService<IPlaywright>();
         var browser = TestServices.GetRequiredService<IBrowser>();
-        await browser.CloseAsync();
+        var browserContext = TestServices.GetRequiredService<IBrowserContext>();
+        var page = TestServices.GetRequiredService<IPage>();
+        
+        await browserContext.DisposeAsync();
+        await browser.DisposeAsync();
+        await page.CloseAsync();
+        playwright.Dispose();
+        
         await TestServices.DisposeAsync();
         _stopwatch.Stop();
         Console.WriteLine($"Elapsed time: {_stopwatch.ElapsedMilliseconds / 1000} sec");

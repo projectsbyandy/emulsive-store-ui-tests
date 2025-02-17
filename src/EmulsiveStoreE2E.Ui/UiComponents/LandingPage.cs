@@ -10,27 +10,17 @@ using Microsoft.Playwright;
 
 namespace EmulsiveStoreE2E.Ui.UiComponents;
 
-public class LandingPage : ILandingPage
+public class LandingPage(IPage page, EnvironmentConfig environmentConfig, IResilienceRetry resilienceRetry)
+    : ILandingPage
 {
-    private readonly IPage _page;
-    private readonly EnvironmentConfig _environmentConfig;
-    private readonly IResilienceRetry _resilienceRetry;
-    
-    public LandingPage(IPage page, EnvironmentConfig environmentConfig, IResilienceRetry resilienceRetry)
-    {
-        _page = page;
-        _environmentConfig = environmentConfig;
-        _resilienceRetry = resilienceRetry;
-    }
-
     public async Task NavigateToStoreAsync()
     {
-        await _page.GotoAsync(_environmentConfig.EmulsiveStoreUrl);
+        await page.GotoAsync(environmentConfig.EmulsiveStoreUrl);
     }
 
     public async Task<(string, string)> GetIntroContentAsync()
     {
-        var introElement = _page.GetByTestId("IntroContent");
+        var introElement = page.GetByTestId("IntroContent");
         var introHeading = Guard.Against.Null(await introElement.Locator("h1").TextContentAsync());
         var introText = Guard.Against.Null(await introElement.Locator("p").TextContentAsync());
         
@@ -39,13 +29,13 @@ public class LandingPage : ILandingPage
 
     public async Task<IList<FilmProduct>> ExtractFeaturedFilmsAsync(int numberToExtract)
     {
-        if(_environmentConfig.EnableDelayForParallelTest)
+        if(environmentConfig.EnableDelayForParallelTest)
             Task.Delay(3000).Wait();
 
         ILocator? productElements = null;
-        await _resilienceRetry.PerformAsync(async () =>
+        await resilienceRetry.PerformAsync(async () =>
         {
-            var featureProducts = _page.GetByTestId("FeaturedProducts");
+            var featureProducts = page.GetByTestId("FeaturedProducts");
             productElements = featureProducts.Locator("a[href^='/products']");
             var productCount = await productElements.CountAsync();
             
@@ -61,7 +51,7 @@ public class LandingPage : ILandingPage
 
         for (var i = 0; i < productCount; i++)
         {
-            await _resilienceRetry.UntilTrueAsync("Wait for images to load", async () => await productElements.Nth(i).Locator("div img").IsVisibleAsync(), TimeSpan.FromMilliseconds(200), _environmentConfig.RetryConfig.DefaultRetries); 
+            await resilienceRetry.UntilTrueAsync("Wait for images to load", async () => await productElements.Nth(i).Locator("div img").IsVisibleAsync(), TimeSpan.FromMilliseconds(200), environmentConfig.RetryConfig.DefaultRetries); 
             products.Add(new FilmProduct()
             {
                 Id = SelectProductIdFromUrl(Guard.Against.Null(await productElements.Nth(i).GetAttributeAsync("href"))),
@@ -76,12 +66,12 @@ public class LandingPage : ILandingPage
 
     public async Task SelectOurProductsAsync()
     {
-        await _page.GetByText("Our Products").ClickAsync();
+        await page.GetByText("Our Products").ClickAsync();
     }
     
     public async Task SelectFeaturedProductsAsync(string productName)
     {
-        var parentElement = _page.Locator($"img[alt='{productName}']").TraverseUpwards(3);
+        var parentElement = page.Locator($"img[alt='{productName}']").TraverseUpwards(3);
         await parentElement.ClickAsync();
     }
 

@@ -8,6 +8,10 @@ using Microsoft.Playwright;
 
 namespace EmulsiveStoreE2E.Tests.NUnit.Parallel;
 
+/*
+ * Example of creating dependencies per test and running in parallel
+ */
+
 [Parallelizable(ParallelScope.All)]
 [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 internal class LandingPageTests : TestLifeCycle

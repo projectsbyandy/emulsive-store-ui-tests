@@ -12,6 +12,9 @@ UI e2e tests for Emulsive-ts-store website
 - Sequential and Parallel playwright tests
   - Stopwatch logs during tests provide an indication og test times (note unit does not report correctly paralleled tests run times)
   - Update the `enableDelayForParallelTest` flag in `appsettings.json` to illustrate time saved on longer user journeys.
+- Parallel scenario level ReqNRoll tests
+  - Using Aufofac for DI
+  - `[assembly: Parallelizable(ParallelScope.Children)]` attribute at root
 - Config support
 - Retry resilience
 - Dependency separation between business logic in core and playwright implementation
