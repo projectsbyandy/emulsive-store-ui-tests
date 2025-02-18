@@ -6,6 +6,17 @@ Feature: Emulsive Store Products Page
 Background:
     Given am on the Products page
 
+Scenario: Verify updating the filter options are persistetd
+    When Filtering on the following options:
+      | FilterOption | Value              |
+      | Keyword      | Kodak              |
+      | Format       | 35mm               |
+      | Manufacturer | Kodak              |
+      | OrderBy      | highest-price-desc |
+      | OnSale       | checked            |
+      | Price        | 2500               |
+    Then the values will be persisted in the filter options
+
 Scenario: Verify Reset reverts all filter options
     And Filter on the following options:
     | FilterOption | Value              |
@@ -17,10 +28,3 @@ Scenario: Verify Reset reverts all filter options
     | Price        | 2000               |
     When I click on Reset
     Then the filters will revert back to default
-
-#Scenario: Verify Keyword Filter
-#    When I sort on the Keyword with value 'Portra'
-#    Then the results on the first page will contain the keyword in either title, description or manufacturer
-#    And the Format option will contain:
-#      |120mm |
-#      |35mm  |

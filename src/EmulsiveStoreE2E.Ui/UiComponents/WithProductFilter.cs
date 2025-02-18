@@ -55,7 +55,7 @@ public abstract class WithProductFilter(IPage page) : IWithProductFilter
     {
         Dictionary<FilterOption, Func<Task<string>>> optionGetDictionary = new()
         {
-            { FilterOption.Keyword, async () => Guard.Against.Null(await page.Locator(KeywordLocator).TextContentAsync()) },
+            { FilterOption.Keyword, async () => Guard.Against.Null(await page.Locator(KeywordLocator).InputValueAsync()) },
             { FilterOption.Format, async () => Guard.Against.Null(await page.Locator(FormatLocator).InputValueAsync()) },
             { FilterOption.Manufacturer, async () => Guard.Against.Null(await page.Locator(ManufacturerLocator).InputValueAsync()) },
             { FilterOption.OrderBy, async () => Guard.Against.Null(await page.Locator(OrderByLocator).InputValueAsync()) },

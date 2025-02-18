@@ -2,17 +2,20 @@ using EmulsiveStoreE2E.Core.Models;
 using EmulsiveStoreE2E.Core.UiComponents;
 using Reqnroll;
 using Ardalis.GuardClauses;
+using EmulsiveStoreE2E.Core.Exceptions;
 
 namespace EmulsiveStoreE2E.Tests.Bdd.Steps;
 
 [Binding]
 internal class FilterStepDefinitions(IProductsPage productsPage)
 {
-    [Given("Filter on the following options:")]
-    public async Task GivenFilterOnTheFollowingOptions(Table table)
+    private IEnumerable<FilterOptions>? _transientFilterOptions;
+    
+    [StepDefinition("^(?:Filtering|Filter) on the following options:$")]
+    public async Task SetTheFilterOptions(Table table)
     {
-        var filterOptions = table.CreateSet<SetFilterOptions>();
-        foreach (var option in filterOptions)
+        _transientFilterOptions = table.CreateSet<FilterOptions>();
+        foreach (var option in _transientFilterOptions)
         {
             await productsPage.SetFilterOptionAsync(option.FilterOption, Guard.Against.Null(option.Value));
             await productsPage.SearchAsync();
@@ -46,8 +49,21 @@ internal class FilterStepDefinitions(IProductsPage productsPage)
         var price = await productsPage.GetFilterValueAsync(FilterOption.Price);
         Assert.That(price, Is.EqualTo("3000"));
     }
+    
+    [Then("the values will be persisted in the filter options")]
+    public async Task ThenTheValuesWillBePersistedInTheFilterOptions()
+    {
+        if (_transientFilterOptions is null)
+            throw new RegressionTestException("Unable to Verify as Filter Options have not been set");
 
-    private record SetFilterOptions
+        foreach (var transientFilterOption in _transientFilterOptions)
+        {
+            var actualValue = await productsPage.GetFilterValueAsync(transientFilterOption.FilterOption);
+            Assert.That(actualValue, Is.EqualTo(transientFilterOption.Value));
+        }
+    }
+
+    private record FilterOptions
     {
         public FilterOption FilterOption { get; init; }
         public string? Value { get; init; }
