@@ -8,10 +8,12 @@ Background:
 
 Scenario: Verify Reset reverts all filter options
     And Filter on the following options:
-    | FilterOption      | Value     |
-    | Keyword           | Portra    |
-    | Format            | 35mm      |
-    | Manufacturer      | Cinestill |
+    | FilterOption | Value              |
+    | Keyword      | Portra             |
+    | Format       | 35mm               |
+    | Manufacturer | Kodak              |
+    | OrderBy      | highest-price-desc |
+    | OnSale       | checked            |
     When I click on Reset
     Then the filters will revert back to default
 

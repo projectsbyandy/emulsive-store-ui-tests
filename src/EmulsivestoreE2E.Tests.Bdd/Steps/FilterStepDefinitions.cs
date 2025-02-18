@@ -1,6 +1,7 @@
 using EmulsiveStoreE2E.Core.Models;
 using EmulsiveStoreE2E.Core.UiComponents;
 using Reqnroll;
+using Ardalis.GuardClauses;
 
 namespace EmulsiveStoreE2E.Tests.Bdd.Steps;
 
@@ -13,19 +14,11 @@ internal class FilterStepDefinitions(IProductsPage productsPage)
         var filterOptions = table.CreateSet<SetFilterOptions>();
         foreach (var option in filterOptions)
         {
-            await productsPage.SetFilterOptionAsync(option.FilterOption, option.Value);
+            await productsPage.SetFilterOptionAsync(option.FilterOption, Guard.Against.Null(option.Value));
+            await productsPage.SearchAsync();
         }
-        
-        await productsPage.SearchAsync();
     }
     
-    [StepDefinition(@"I sort on the {FilterOption} with value {string}")]
-    public async Task VerifyIntroTitle(FilterOption filterOption, string searchValue)
-    {
-        await productsPage.SetFilterOptionAsync(filterOption, searchValue);
-        await productsPage.SearchAsync();
-    }
-
     [When("I click on Reset")]
     public async Task WhenIClickOnReset()
     {
@@ -43,11 +36,17 @@ internal class FilterStepDefinitions(IProductsPage productsPage)
 
         var manufacturer = await productsPage.GetFilterValueAsync(FilterOption.Manufacturer);
         Assert.That(manufacturer, Is.EqualTo("all"));
+        
+        var orderby = await productsPage.GetFilterValueAsync(FilterOption.OrderBy);
+        Assert.That(orderby, Is.EqualTo("a-z"));
+        
+        var onsale = await productsPage.GetFilterValueAsync(FilterOption.OnSale);
+        Assert.That(onsale, Is.EqualTo("unchecked"));
     }
 
     private record SetFilterOptions
     {
         public FilterOption FilterOption { get; init; }
-        public string Value { get; init; }
+        public string? Value { get; init; }
     }
 }
