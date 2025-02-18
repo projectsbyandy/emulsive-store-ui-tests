@@ -44,4 +44,10 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Features\Products.feature.cs">
+        <DependentUpon>Products.feature</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

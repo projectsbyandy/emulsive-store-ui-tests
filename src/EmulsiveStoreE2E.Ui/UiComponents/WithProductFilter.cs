@@ -2,6 +2,7 @@ using EmulsiveStoreE2E.Core.Models;
 using EmulsiveStoreE2E.Core.UiComponents;
 using Microsoft.Playwright;
 using Ardalis.GuardClauses;
+using EmulsiveStoreE2E.Ui.Services;
 
 namespace EmulsiveStoreE2E.Ui.UiComponents;
 
@@ -12,6 +13,8 @@ public abstract class WithProductFilter(IPage page) : IWithProductFilter
     private const string ManufacturerLocator = "select[name='manufacturer']";
     private const string OrderByLocator = "select[name='orderby']";
     private const string OnSaleLocator = "#onsale";
+    private const string PriceLocator = "#price";
+    private const float PriceMax = 3000f;
     
     public Task<bool> IsOptionPresentInFilterAsync(FilterOption filterOption)
     {
@@ -34,7 +37,8 @@ public abstract class WithProductFilter(IPage page) : IWithProductFilter
                         await onSaleElement.ClickAsync();
                     }
                 }
-            }
+            },
+            { FilterOption.Price, async () => await SliderHelper.SetAsync(page.Locator(PriceLocator), page, PriceMax, value) },
         };
         
         optionSetDictionary.TryGetValue(filterOption, out var filterSet);
@@ -56,7 +60,7 @@ public abstract class WithProductFilter(IPage page) : IWithProductFilter
             { FilterOption.Manufacturer, async () => Guard.Against.Null(await page.Locator(ManufacturerLocator).InputValueAsync()) },
             { FilterOption.OrderBy, async () => Guard.Against.Null(await page.Locator(OrderByLocator).InputValueAsync()) },
             { FilterOption.OnSale, async () => Guard.Against.Null(await page.Locator(OnSaleLocator).IsCheckedAsync() ? "checked" : "unchecked") },
-
+            { FilterOption.Price, async () => Guard.Against.Null(await page.Locator(PriceLocator).Locator("input").InputValueAsync()) }
         };
 
         optionGetDictionary.TryGetValue(filterOption, out var getFilterValue);

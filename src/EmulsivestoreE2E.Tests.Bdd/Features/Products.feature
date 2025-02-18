@@ -14,6 +14,7 @@ Scenario: Verify Reset reverts all filter options
     | Manufacturer | Kodak              |
     | OrderBy      | highest-price-desc |
     | OnSale       | checked            |
+    | Price        | 2000               |
     When I click on Reset
     Then the filters will revert back to default
 

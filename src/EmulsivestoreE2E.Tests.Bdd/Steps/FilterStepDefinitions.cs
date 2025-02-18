@@ -42,6 +42,9 @@ internal class FilterStepDefinitions(IProductsPage productsPage)
         
         var onsale = await productsPage.GetFilterValueAsync(FilterOption.OnSale);
         Assert.That(onsale, Is.EqualTo("unchecked"));
+        
+        var price = await productsPage.GetFilterValueAsync(FilterOption.Price);
+        Assert.That(price, Is.EqualTo("3000"));
     }
 
     private record SetFilterOptions
