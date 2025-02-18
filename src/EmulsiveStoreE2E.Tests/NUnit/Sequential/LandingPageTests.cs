@@ -17,6 +17,7 @@ namespace EmulsiveStoreE2E.Tests.NUnit.Sequential;
 internal class LandingPageTests : TestSetup
 {
     private ILandingPage _landingPage;
+    private INavigate _navigate;
     private IPage _page;
     private IResilienceRetry _resilienceRetry;
 
@@ -24,13 +25,14 @@ internal class LandingPageTests : TestSetup
     public async Task Setup()
     {
         _landingPage = Guard.Against.Null(TestServices.GetService<ILandingPage>());
+        _navigate = Guard.Against.Null(TestServices.GetService<INavigate>());
         _page = Guard.Against.Null(TestServices.GetService<IPage>());
         Guard.Against.Null(TestServices.GetService<ILogger>())
             .Information("Page hash from sequential tests: {@Hash}", _page.GetHashCode());
         
         _resilienceRetry = Guard.Against.Null(TestServices.GetService<IResilienceRetry>());
         
-        await _landingPage.NavigateToStoreAsync();
+        await _navigate.To(StoreSection.Landing);
     }
     
     [Test]

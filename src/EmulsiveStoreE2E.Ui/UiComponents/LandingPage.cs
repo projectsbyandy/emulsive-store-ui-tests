@@ -12,12 +12,7 @@ namespace EmulsiveStoreE2E.Ui.UiComponents;
 
 public class LandingPage(IPage page, EnvironmentConfig environmentConfig, IResilienceRetry resilienceRetry)
     : ILandingPage
-{
-    public async Task NavigateToStoreAsync()
-    {
-        await page.GotoAsync(environmentConfig.EmulsiveStoreUrl);
-    }
-
+{ 
     public async Task<(string, string)> GetIntroContentAsync()
     {
         var introElement = page.GetByTestId("IntroContent");

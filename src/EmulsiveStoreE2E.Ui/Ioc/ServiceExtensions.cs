@@ -11,8 +11,12 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddUiServices(this IServiceCollection services)
     {
-        services.AddScoped<ILandingPage, LandingPage>();
-        
+        services
+            .AddScoped<ILandingPage, LandingPage>()
+            .AddSingleton<WithProductFilter, ProductsPage>()
+            .AddScoped<IProductsPage, ProductsPage>()
+            .AddScoped<INavigate, Navigate>();
+
         return services;
     }
 

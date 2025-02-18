@@ -44,6 +44,9 @@ internal static class Extensions
     public static ContainerBuilder AddUiServices(this ContainerBuilder builder)
     {
         builder.RegisterType<LandingPage>().As<ILandingPage>().SingleInstance();
+        builder.RegisterType<WithProductFilter>().As<IWithProductFilter>().SingleInstance();
+        builder.RegisterType<ProductsPage>().As<IProductsPage>().SingleInstance();
+        builder.RegisterType<Navigate>().As<INavigate>().SingleInstance();
 
         return builder;
     }

@@ -4,7 +4,7 @@ using Reqnroll;
  namespace EmulsiveStoreE2E.Tests.Bdd.Steps;
  
  [Binding]
- public class LandingPageSteps(ILandingPage landingPage)
+ internal class LandingPageSteps(ILandingPage landingPage)
  {
      [Then(@"the intro (title|description) will be (.*)")]
      public async Task VerifyIntroTitle(string contentType, string expectedText)

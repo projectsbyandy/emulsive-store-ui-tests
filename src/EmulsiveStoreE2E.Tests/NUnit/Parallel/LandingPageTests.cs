@@ -17,6 +17,7 @@ namespace EmulsiveStoreE2E.Tests.NUnit.Parallel;
 internal class LandingPageTests : TestLifeCycle
 {
     private ILandingPage _landingPage;
+    private INavigate _navigate;
     private IPage _page;
     private IResilienceRetry _resilienceRetry;
     private EnvironmentConfig _environmentConfig;
@@ -27,10 +28,11 @@ internal class LandingPageTests : TestLifeCycle
         await SetupServiceProviderAsync();
         _landingPage = GetService<ILandingPage>();
         _page = GetService<IPage>();
+        _navigate = GetService<INavigate>();
         _resilienceRetry = GetService<IResilienceRetry>();
         _environmentConfig = GetService<EnvironmentConfig>();
         
-        await _landingPage.NavigateToStoreAsync();
+        await _navigate.To(StoreSection.Landing);
     }
     
     [Test]
@@ -38,7 +40,7 @@ internal class LandingPageTests : TestLifeCycle
     {
         // Arrange / Act
         var (introTitle, introContent) = await _landingPage.GetIntroContentAsync();
-        
+
         // Assert
         Assert.That(introTitle, Is.EqualTo("Bringing film emulsive love!"));
         Assert.That(introContent, Is.EqualTo("We’re passionate about supporting photographers - big and small - and know what it means to have a shop you can trust and rely on."));

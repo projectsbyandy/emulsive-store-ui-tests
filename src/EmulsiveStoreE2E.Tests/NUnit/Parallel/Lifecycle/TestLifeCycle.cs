@@ -5,7 +5,6 @@ using EmulsiveStoreE2E.Core.Ioc;
 using EmulsiveStoreE2E.Ui.Ioc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
-using Microsoft.VisualBasic;
 using NUnit.Framework.Interfaces;
 using Serilog;
 
