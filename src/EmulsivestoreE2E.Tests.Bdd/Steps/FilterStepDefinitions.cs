@@ -11,7 +11,7 @@ internal class FilterStepDefinitions(IProductsPage productsPage)
 {
     private IEnumerable<FilterOptions>? _transientFilterOptions;
     
-    [StepDefinition("^(?:Filtering|Filter) on the following options:$")]
+    [StepDefinition("Filtering/Filter on the following options:")]
     public async Task SetTheFilterOptions(Table table)
     {
         _transientFilterOptions = table.CreateSet<FilterOptions>();
