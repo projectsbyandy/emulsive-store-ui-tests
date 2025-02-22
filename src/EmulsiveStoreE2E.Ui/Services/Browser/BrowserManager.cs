@@ -18,5 +18,5 @@ public static class BrowserManager
             BrowserInTest.WebKit => await playwright.Webkit.LaunchAsync(browserOptions),
             _ => throw new NotSupportedException(nameof(browserConfig.BrowserInTest))
         };
-    }   
+    }
 }

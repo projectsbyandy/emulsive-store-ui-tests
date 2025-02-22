@@ -13,7 +13,7 @@ public static class ServiceExtensions
     {
         services
             .AddScoped<ILandingPage, LandingPage>()
-            .AddSingleton<WithProductFilter, ProductsPage>()
+            .AddScoped<WithProductFilter, ProductsPage>()
             .AddScoped<IProductsPage, ProductsPage>()
             .AddScoped<INavigate, Navigate>();
 

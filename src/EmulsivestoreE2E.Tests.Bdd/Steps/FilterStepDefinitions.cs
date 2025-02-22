@@ -63,6 +63,15 @@ internal class FilterStepDefinitions(IProductsPage productsPage)
         }
     }
 
+    [Then("products in the {int}st/nd page will contain the keyword in either the title, description or manufacturer")]
+    public async Task ProductsContainKeyWordOnPage(int pageNumber)
+    {
+        if (pageNumber > 1)
+            await productsPage.ExpectMoreThanOnePageAsync();
+        
+        var products = await productsPage.GetProductsOnPageAsync(pageNumber);
+    }
+    
     private record FilterOptions
     {
         public FilterOption FilterOption { get; init; }

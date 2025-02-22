@@ -28,35 +28,22 @@ public class LandingPage(IPage page, EnvironmentConfig environmentConfig, IResil
             Task.Delay(3000).Wait();
 
         ILocator? productElements = null;
+        
         await resilienceRetry.PerformAsync(async () =>
         {
             var featureProducts = page.GetByTestId("FeaturedProducts");
             productElements = featureProducts.Locator("a[href^='/products']");
             var productCount = await productElements.CountAsync();
             
-            if(productCount == numberToExtract)
+            if (productCount == numberToExtract)
                 return;
             
             throw new RetryException("Expected number of featured items not present");
         }, TimeSpan.FromMilliseconds(200), 5);
         
         Guard.Against.Null(productElements);
-        var productCount = await productElements.CountAsync();
-        var products = new List<FilmProduct>();
 
-        for (var i = 0; i < productCount; i++)
-        {
-            await resilienceRetry.UntilTrueAsync("Wait for images to load", async () => await productElements.Nth(i).Locator("div img").IsVisibleAsync(), TimeSpan.FromMilliseconds(200), environmentConfig.RetryConfig.DefaultRetries); 
-            products.Add(new FilmProduct()
-            {
-                Id = SelectProductIdFromUrl(Guard.Against.Null(await productElements.Nth(i).GetAttributeAsync("href"))),
-                ImageUrl = Guard.Against.Null(await productElements.Nth(i).Locator("div img").GetAttributeAsync("src")),
-                Name = Guard.Against.Null(await productElements.Nth(i).Locator("h2").TextContentAsync()),
-                PriceWithCurrency = Guard.Against.Null(await productElements.Nth(i).Locator("div p").TextContentAsync())
-            });
-        }
-        
-        return products;
+        return await ProductExtraction.FromGridAsync(productElements);
     }
 
     public async Task SelectOurProductsAsync()

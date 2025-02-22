@@ -28,3 +28,10 @@ Scenario: Verify Reset reverts all filter options
     | Price        | 2000               |
     When I click on Reset
     Then the filters will revert back to default
+
+# Full filtering tests performed in the API layer
+Scenario: Verify Filtering on Keyword return associated results on 1st Page
+    When Filtering on the following options:
+       | FilterOption | Value  |
+       | Keyword      | Kodak  |
+    Then products in the 1st page will contain the keyword in either the title, description or manufacturer
