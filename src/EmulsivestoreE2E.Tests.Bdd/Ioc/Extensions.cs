@@ -53,10 +53,10 @@ internal static class Extensions
 
     public static ContainerBuilder AddPlaywrightComponents(this ContainerBuilder builder)
     {
-        var playwright = (BrowserManager.CreatePlaywrightAsync()).Result;
-        var browser = (BrowserManager.CreateBrowserAsync(ConfigManager.EnvConfig.BrowserConfig, playwright)).Result;
-        var context = (browser.NewContextAsync()).Result;
-        var page = (context.NewPageAsync()).Result;
+        var playwright = BrowserManager.CreatePlaywrightAsync().Result;
+        var browser = BrowserManager.CreateBrowserAsync(ConfigManager.EnvConfig.BrowserConfig, playwright).Result;
+        var context = browser.NewContextAsync().Result;
+        var page = context.NewPageAsync().Result;
 
         builder.RegisterInstance(playwright).As<IPlaywright>().SingleInstance();
         builder.RegisterInstance(browser).As<IBrowser>().SingleInstance();

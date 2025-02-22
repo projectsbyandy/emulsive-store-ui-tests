@@ -51,7 +51,7 @@ public class LandingPage(IPage page, EnvironmentConfig environmentConfig, IResil
         await page.GetByText("Our Products").ClickAsync();
     }
     
-    public async Task SelectFeaturedProductsAsync(string productName)
+    public async Task SelectFeaturedProductAsync(string productName)
     {
         var parentElement = page.Locator($"img[alt='{productName}']").TraverseUpwards(3);
         await parentElement.ClickAsync();

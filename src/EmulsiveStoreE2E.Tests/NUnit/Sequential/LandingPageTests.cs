@@ -84,6 +84,6 @@ internal class LandingPageTests : TestSetup
     [Test]
     public async Task Verify_Selecting_a_Featured_Product_Takes_User_to_ProductDetails_Page()
     {
-        await _landingPage.SelectFeaturedProductsAsync("Gold 200");
+        await _landingPage.SelectFeaturedProductAsync("Gold 200");
     }
 }

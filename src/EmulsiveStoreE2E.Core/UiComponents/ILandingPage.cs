@@ -7,5 +7,5 @@ public interface ILandingPage
     public Task<(string, string)> GetIntroContentAsync();
     public Task<IList<FilmProduct>> ExtractFeaturedFilmsAsync(int numberToExtract);
     public Task SelectOurProductsAsync();
-    public Task SelectFeaturedProductsAsync(string productName);
+    public Task SelectFeaturedProductAsync(string productName);
 }
