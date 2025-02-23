@@ -62,11 +62,11 @@ internal class LandingPageTests : TestLifeCycle
 
     static IEnumerable<FilmProduct> ExpectedFeaturedProducts()
     {
-        yield return new FilmProduct { Id = 19, Name = "Gold 200", ImageUrl = "https://iili.io/2iqmyF9.webp", PriceWithCurrency = "£9.50" };
-        yield return new FilmProduct { Id = 6, Name = "Hp5 Plus", ImageUrl = "https://iili.io/2iqmbGS.webp", PriceWithCurrency = "£7.35" };
-        yield return new FilmProduct { Id = 24, Name = "800T", ImageUrl = "https://iili.io/2iqmiyG.webp", PriceWithCurrency = "£19.00" };
-        yield return new FilmProduct { Id = 25, Name = "Rollei Infrared", ImageUrl = "https://iili.io/2iqm43X.webp", PriceWithCurrency = "£19.00" };
-        yield return new FilmProduct { Id = 7, Name = "Portra 400", ImageUrl = "https://iili.io/2iqmm67.webp", PriceWithCurrency = "£12.90" };
+        yield return new FilmProduct { Id = 19, Name = "Gold 200", ImageUrl = "https://iili.io/2iqmyF9.webp", PriceWithCurrency = "£9.50", DetailsUrlPart = "/products/19" };
+        yield return new FilmProduct { Id = 6, Name = "Hp5 Plus", ImageUrl = "https://iili.io/2iqmbGS.webp", PriceWithCurrency = "£7.35", DetailsUrlPart = "/products/6" };
+        yield return new FilmProduct { Id = 24, Name = "800T", ImageUrl = "https://iili.io/2iqmiyG.webp", PriceWithCurrency = "£19.00", DetailsUrlPart = "/products/24" };
+        yield return new FilmProduct { Id = 25, Name = "Rollei Infrared", ImageUrl = "https://iili.io/2iqm43X.webp", PriceWithCurrency = "£19.00", DetailsUrlPart = "/products/25" };
+        yield return new FilmProduct { Id = 7, Name = "Portra 400", ImageUrl = "https://iili.io/2iqmm67.webp", PriceWithCurrency = "£12.90", DetailsUrlPart = "/products/7" };
     }
     
     [Test]

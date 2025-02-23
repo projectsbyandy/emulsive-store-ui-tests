@@ -2,11 +2,13 @@ using EmulsiveStoreE2E.Core.Models;
 using EmulsiveStoreE2E.Core.UiComponents;
 using Microsoft.Playwright;
 using Ardalis.GuardClauses;
+using EmulsiveStoreE2E.Core.Models.Config;
 using EmulsiveStoreE2E.Ui.Services;
+using static Microsoft.Playwright.Assertions;
 
 namespace EmulsiveStoreE2E.Ui.UiComponents;
 
-public abstract class WithProductFilter(IPage page) : IWithProductFilter
+public abstract class WithProductFilter(IPage page, EnvironmentConfig environmentConfig) : IWithProductFilter
 {
     private const string KeywordLocator = "input[type='keyword']";
     private const string FormatLocator = "select[name='format']";
@@ -49,7 +51,10 @@ public abstract class WithProductFilter(IPage page) : IWithProductFilter
         => await page.Locator("button[type='submit']").ClickAsync();
 
     public async Task ResetFilterAsync()
-        => await page.GetByTestId("reset").ClickAsync();
+    {
+        await page.GetByTestId("reset").ClickAsync();
+        await Expect(page).ToHaveURLAsync(environmentConfig.EmulsiveStoreUrl + "/products");
+    }
 
     public Task<string> GetFilterValueAsync(FilterOption filterOption)
     {

@@ -9,7 +9,3 @@ Background:
 Scenario: Verify Intro content is present
     Then the intro title will be Bringing film emulsive love!
     And the intro description will be We’re passionate about supporting photographers - big and small - and know what it means to have a shop you can trust and rely on.
-
-Scenario: Verify Intro content is present 2
-    Then the intro title will be Bringing film emulsive love!
-    And the intro description will be We’re passionate about supporting photographers - big and small - and know what it means to have a shop you can trust and rely on.

@@ -63,13 +63,19 @@ internal class FilterStepDefinitions(IProductsPage productsPage)
         }
     }
 
-    [Then("products in the {int}st/nd page will contain the keyword in either the title, description or manufacturer")]
-    public async Task ProductsContainKeyWordOnPage(int pageNumber)
+    [Then("all filtered products will contain the keyword in either the title, description or manufacturer")]
+    public async Task ProductsContainKeyWordOnPage()
     {
-        if (pageNumber > 1)
-            await productsPage.ExpectMoreThanOnePageAsync();
+        ArgumentNullException.ThrowIfNull(_transientFilterOptions, "Filter options have not been set");
         
-        var products = await productsPage.GetProductsOnPageAsync(pageNumber);
+        var keyword = Guard.Against.Null(_transientFilterOptions.ToList().Find(o => o.FilterOption == FilterOption.Keyword)?.Value);
+        
+        var filterOutcome = await productsPage.IsKeywordPresentInAllProductAsync(keyword);
+        
+        foreach (var film in filterOutcome)
+        {
+            Assert.That(film.Value, Is.EqualTo(true), $"{film.Key}: Keyword not found in name, manufacturer or description");
+        }
     }
     
     private record FilterOptions
