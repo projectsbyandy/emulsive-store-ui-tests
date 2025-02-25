@@ -2,7 +2,9 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using Ardalis.GuardClauses;
 using EmulsiveStoreE2E.Core.Ioc;
+using EmulsiveStoreE2E.Core.Services;
 using EmulsiveStoreE2E.Ui.Ioc;
+using EmulsiveStoreE2E.Ui.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
 using NUnit.Framework.Interfaces;
@@ -30,8 +32,9 @@ internal class TestLifeCycle : IDisposable
     }
 
     [OneTimeSetUp]
-    public static void SetUp()
+    public static async Task SetUp()
     {
+        await PerformHealthCheckAsync();
         Stopwatch.Start();
     }
     
@@ -49,6 +52,7 @@ internal class TestLifeCycle : IDisposable
         serviceCollection
             .AddConfigSupport()
             .AddUiServices()
+            .AddLoggingSupport()
             .AddResilienceSupport();
 
         await serviceCollection.AddPlaywrightSupportAsync();
@@ -123,4 +127,14 @@ internal class TestLifeCycle : IDisposable
 
     private ILogger GetLogger()
         => Guard.Against.Null(GetServiceProvider(TestContext.CurrentContext.Test.ID).GetService<ILogger>());
+
+    private static async Task PerformHealthCheckAsync()
+    {
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddConfigSupport().AddLoggingSupport();
+        serviceCollection.AddSingleton<IHeathCheck, HealthCheck>();
+        await serviceCollection.AddPlaywrightSupportAsync();
+        
+        await Guard.Against.Null(serviceCollection.BuildServiceProvider().GetService<IHeathCheck>()).VerifyEmulsiveStoreRunningAsync();
+    }
 }

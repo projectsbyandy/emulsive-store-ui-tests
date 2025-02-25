@@ -33,14 +33,19 @@ internal static class Extensions
     public static ContainerBuilder AddResilienceSupport(this ContainerBuilder builder)
     {
         builder.RegisterType<ResilienceRetry>().As<IResilienceRetry>().SingleInstance();
-        builder.RegisterInstance(new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console()
-            .CreateLogger()).As<ILogger>().SingleInstance();
 
         return builder;
     }
 
+    public static ContainerBuilder AddLoggingSupport(this ContainerBuilder builder)
+    {
+        builder.RegisterInstance(new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .CreateLogger()).As<ILogger>().SingleInstance();
+        
+        return builder;
+    }
     public static ContainerBuilder AddUiServices(this ContainerBuilder builder)
     {
         builder.RegisterType<LandingPage>().As<ILandingPage>().SingleInstance();

@@ -16,6 +16,7 @@ internal class DependencyRegistration
         // Register scenario scoped dependencies
         builder
             .AddConfigSupport()
+            .AddLoggingSupport()
             .AddResilienceSupport()
             .AddUiServices()
             .AddPlaywrightComponents();

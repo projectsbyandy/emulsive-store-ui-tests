@@ -1,8 +1,11 @@
 using System.Diagnostics;
 using EmulsiveStoreE2E.Core.Ioc;
+using EmulsiveStoreE2E.Core.Services;
 using EmulsiveStoreE2E.Ui.Ioc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
+using Ardalis.GuardClauses;
+using EmulsiveStoreE2E.Ui.Services;
 
 namespace EmulsiveStoreE2E.Tests.NUnit.Sequential.Lifecycle;
 
@@ -19,13 +22,19 @@ internal class TestSetup
         serviceCollection
             .AddConfigSupport()
             .AddUiServices()
+            .AddLoggingSupport()
             .AddResilienceSupport();
 
+        serviceCollection.AddScoped<IHeathCheck, HealthCheck>();
+        
         await serviceCollection.AddPlaywrightSupportAsync();
         TestServices = serviceCollection.BuildServiceProvider();
+
+        await Guard.Against.Null(TestServices.GetService<IHeathCheck>()).VerifyEmulsiveStoreRunningAsync();
+        
         _stopwatch.Start();
     }
-
+    
     [OneTimeTearDown]
     public async Task GlobalTeardown()
     {
@@ -42,5 +51,20 @@ internal class TestSetup
         await TestServices.DisposeAsync();
         _stopwatch.Stop();
         Console.WriteLine($"Elapsed time: {_stopwatch.ElapsedMilliseconds / 1000} sec");
+    }
+
+    private async Task PerformHealthCheck()
+    {
+        var serviceCollection = new ServiceCollection();
+        
+        serviceCollection
+            .AddConfigSupport()
+            .AddUiServices()
+            .AddResilienceSupport();
+
+        await serviceCollection.AddPlaywrightSupportAsync();
+        TestServices = serviceCollection.BuildServiceProvider();
+
+        await Guard.Against.Null(TestServices.GetService<IHeathCheck>()).VerifyEmulsiveStoreRunningAsync();
     }
 }

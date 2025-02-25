@@ -14,6 +14,7 @@ public class ProductsPage(IPage page, EnvironmentConfig environmentConfig) : Wit
     private readonly ILocator _productDetails = page.GetByTestId("productDetails");
     
     private readonly IPage _page = page;
+    private readonly EnvironmentConfig _environmentConfig = environmentConfig;
 
     public async Task<Dictionary<string, bool>> IsKeywordPresentInAllProductAsync(string keyword)
     {
@@ -29,7 +30,7 @@ public class ProductsPage(IPage page, EnvironmentConfig environmentConfig) : Wit
             }
             else
             {
-                await _page.GotoAsync(environmentConfig.EmulsiveStoreUrl + filmProduct.DetailsUrlPart);
+                await _page.GotoAsync(_environmentConfig.EmulsiveStoreUrl + filmProduct.DetailsUrlPart);
                 var product = await ProductExtraction.FromDetailsAsync(_productDetails);
                 filterOutcome.Add(filmProduct.Name, product.Manufacturer!.Contains(keyword, StringComparison.OrdinalIgnoreCase) || product.Description!.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }

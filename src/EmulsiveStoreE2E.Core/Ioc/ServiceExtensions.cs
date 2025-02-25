@@ -28,10 +28,17 @@ public static class ServiceExtensions
     public static IServiceCollection AddResilienceSupport(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IResilienceRetry, ResilienceRetry>();
+        
+        return serviceCollection;
+    }
+
+    public static IServiceCollection AddLoggingSupport(this IServiceCollection serviceCollection)
+    {
         serviceCollection.AddScoped<ILogger>(sp => new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
             .CreateLogger());
+        
         return serviceCollection;
     }
 }
