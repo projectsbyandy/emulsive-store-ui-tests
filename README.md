@@ -18,3 +18,24 @@ UI e2e tests for Emulsive-ts-store website
 - Config support
 - Retry resilience
 - Dependency separation between business logic in core and playwright implementation
+
+## Test Setup
+Before running the tests the local configuration file needs to be setup.
+
+1. Create a new file `appsettings.local.json` in the location `emulsive-store-ui-tests/src/EmulsiveStoreE2E.Tests/`. 
+   - There should be other configuration files in the same directory
+2. Copy the following settings into the json and save
+   ```json
+    {
+      "environment": "local",
+      "emulsiveStoreUrl": "http://localhost:5500"
+    }
+   ```
+3. Save and ensure that the Copy to Output directory is set to Copy if newer.
+4. The Nunit tests should now successfully run. For the BDD tests copy this file to the location `emulsive-store-ui-tests/src/EmulsiveStoreE2E.Tests.Bdd/`
+
+## Trouble Shooting
+### Unable to install the playwright browser due to unknown pwsh command
+1. In an powershell cmd run `dotnet tool update --global PowerShell`
+   - if there is a problem related to not being able to find the tool, it may require you to install a newer version of the dotnet sdk
+2. Enter `pwsh` and the command should run successfully.
