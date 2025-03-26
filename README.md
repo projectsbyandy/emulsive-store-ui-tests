@@ -1,5 +1,5 @@
 # emulsive-store-ui-tests
-UI e2e tests for Emulsive-ts-store website
+C# UI e2e tests for Emulsive-ts-store website. For Typescript playwright tests go to the emulsive-ts-store project.
 
 ## Setup and start emulsive store
 1. clone `git@github.com:projectsbyandy/emulsive-ts-store.git`
